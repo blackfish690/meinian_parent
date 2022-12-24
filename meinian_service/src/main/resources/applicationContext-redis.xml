@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                         http://www.springframework.org/schema/beans/spring-beans.xsd
+                    http://www.springframework.org/schema/mvc
+                         http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                    http://code.alibabatech.com/schema/dubbo
+                         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+                    http://www.springframework.org/schema/context
+                         http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置redis，配置redis的数据库连接池-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--设置数据库最大连接数-->
+        <property name="maxTotal" value="100"></property>
+        <!--设置最大闲置数-->
+        <property name="maxIdle" value="50"></property>
+        <!--允许借连接-->
+        <property name="testOnBorrow" value="true"></property>
+        <!--借完之后，允许归还-->
+        <property name="testOnReturn" value="true"></property>
+    </bean>
+
+    <!--配置redis数据库的ip地址和端口
+    JedisPool jedisPool = new JedisPool();
+    -->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <!--使用构造函数注入-->
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig"></constructor-arg>
+        <!--设置主机 如果使用的是linux虚拟机，就 必须设置成虚拟的ip地址-->
+        <constructor-arg name="host" value="127.0.0.1"></constructor-arg>
+        <!--设置端口号-->
+        <constructor-arg name="port" value="6379" type="int"></constructor-arg>
+        <!--设置redis的链接超时时间-->
+        <constructor-arg name="timeout" value="300000" type="int"></constructor-arg>
+    </bean>
+
+
+
+
+</beans>

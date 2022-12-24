@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.dao.MemberDao">
+
+    <insert id="addMember" parameterType="com.atguigu.pojo.Member" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_member (fileNumber, name, sex, idCard, phoneNumber, regTime, password, email, birthday, remark)
+        VALUES (#{fileNumber}, #{name}, #{sex}, #{idCard}, #{phoneNumber}, #{regTime}, #{password}, #{email}, #{birthday}, #{remark})
+    </insert>
+
+    <select id="getMemberByPhone" resultType="com.atguigu.pojo.Member">
+        select * from t_member where phoneNumber = #{telephone}
+    </select>
+</mapper>
+
+

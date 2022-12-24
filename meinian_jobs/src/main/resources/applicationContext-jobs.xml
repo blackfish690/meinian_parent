@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                  http://www.springframework.org/schema/beans/spring-beans.xsd
+                  http://www.springframework.org/schema/context
+                  http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--开启注解支持 包扫描-->
+    <context:component-scan base-package="com.atguigu"></context:component-scan>
+    <!--定义工作接口 清理图片-->
+    <bean id="jobDemo" class="com.atguigu.job.ClearImaJob"></bean>
+    <!--定义job详情-->
+    <bean id="jobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--设置目标对象-->
+        <property name="targetObject" ref="jobDemo"></property>
+        <!--设置目标方法-->
+        <property name="targetMethod" value="clearImg"></property>
+    </bean>
+
+    <!--定义触发器-->
+    <bean id="myTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+         <property name="jobDetail" ref="jobDetail"></property>
+        <!--设置cron表达式 ，设置删除图片的时间 半夜凌晨2点删除图片-->
+        <property name="cronExpression">
+            <value>0/15 * * * * ?</value>
+        </property>
+
+    </bean>
+
+    <!--定义调度器-->
+    <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+       <!--注入触发器-->
+        <property name="triggers">
+            <list>
+                <ref bean="myTrigger"></ref>
+            </list>
+        </property>
+    </bean>
+
+</beans>
